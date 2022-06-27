@@ -1,0 +1,17 @@
+pipeline {
+  agent any
+  options {
+        ansiColor('xterm')
+    }
+    stages {
+        
+        stage('ssh') {
+            steps {
+                  sshagent(credentials: ['jenkins-openvpn']){
+                    sh "ssh -o StrictHostKeyChecking=no -l jenkins ${SERVER_IP} 'hostname && whoami && sudo systemctl restart supervisord && sudo systemctl status supervisord && sudo free -m'"
+                  
+              }
+            }
+        }
+   }
+}
